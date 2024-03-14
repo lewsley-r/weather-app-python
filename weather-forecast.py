@@ -19,6 +19,7 @@ def get_weather_data():
         raise SystemExit(e)
 
 def get_todays_weather():
+    listbox.pack() 
     today_data = weather_data['forecast']['forecastday'][0]['day']
     today_date = weather_data['forecast']['forecastday'][0]['date']
     listbox.delete(0,END)
@@ -35,6 +36,7 @@ def get_todays_weather():
 
 
 def get_x_day_weather(x):
+    listbox.pack() 
     x_day_data = weather_data['forecast']['forecastday'][0:x]    
     listbox.delete(0,END)
     listbox.insert('end', 'City: Belfast')
@@ -55,15 +57,15 @@ def draw_temp_vs_seven_days():
     dates = []
     avg_temps = []
     for day in seven_day_data:
-        dates.append(day['date'])
+        dates.append(day['date'][-2:])
         avg_temps.append(str(day['day']['avgtemp_c']))
     avg_temps.sort()
     fig = Figure(figsize=(5, 4), dpi=100)
+    fig.suptitle('Avg Temp (C) Vs. days of the month' ,fontsize=16)
     fig.add_subplot(111).plot(dates, avg_temps)
     canvas = FigureCanvasTkAgg(fig, master=top) 
     canvas.draw()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.X, expand=1)
-
     toolbar = NavigationToolbar2Tk(canvas, top)
     toolbar.update()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.X, expand=1)
@@ -72,7 +74,7 @@ load_dotenv()
 api_key = os.environ["API_KEY"]
 top = Tk()
 top.wm_title("Weather forecast")
-top.geometry("300x300")
+top.geometry("450x900")
 listbox = Listbox(top, height = 10, 
                 width = 40, 
                 bg = "grey",
@@ -88,5 +90,4 @@ seven_day_weather = Button(top, text = "Seven day weather forecast", command = l
 seven_day_weather.pack(fill=tk.X) 
 temp_vs_7days = Button(top, text = "Seven days temperature graphic", command = draw_temp_vs_seven_days) 
 temp_vs_7days.pack(fill=tk.X) 
-listbox.pack() 
 top.mainloop()
