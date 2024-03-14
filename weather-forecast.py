@@ -8,9 +8,10 @@ from tkinter import *
 def get_weather_data():
     city = askstring("Input", "Enter you City")
     url = "http://api.weatherapi.com/v1/forecast.json?key={}&q={}&days=7&aqi=no&alerts=no".format(api_key, city)
-    response = requests.get(url).json()
-    return response
-
+    try:
+        return requests.get(url).json()
+    except requests.exceptions.RequestException as e:  # This is the correct syntax
+        raise SystemExit(e)
 
 def get_todays_weather():
     today_data = weather_data['forecast']['forecastday'][0]['day']
@@ -42,7 +43,6 @@ def get_x_day_weather(x):
                     'Avg Humidity(%): '+str(day['day']['avghumidity']),
                     '\n']
         for (item) in list_items:
-            print (item)
             listbox.insert('end', item)
 
 
@@ -56,13 +56,12 @@ listbox = Listbox(top, height = 10,
                 activestyle = 'dotbox', 
                 font = "Helvetica",
                 fg = "yellow")
-
-weather_data = get_weather_data()
-todays_weather = Button(top, text = "Today's weather", command = get_todays_weather)
-todays_weather.pack(fill=tk.X)
-three_day_weather = Button(top, text = "Three day weather forecast", command = lambda:get_x_day_weather(3))
-three_day_weather.pack(fill=tk.X)
-seven_day_weather = Button(top, text = "Seven day weather forecast", command = lambda:get_x_day_weather(7))
-seven_day_weather.pack(fill=tk.X)
-listbox.pack()
+weather_data = get_weather_data() 
+todays_weather = Button(top, text = "Today's weather", command = get_todays_weather) 
+todays_weather.pack(fill=tk.X) 
+three_day_weather = Button(top, text = "Three day weather forecast", command = lambda:get_x_day_weather(3)) 
+three_day_weather.pack(fill=tk.X) 
+seven_day_weather = Button(top, text = "Seven day weather forecast", command = lambda:get_x_day_weather(7)) 
+seven_day_weather.pack(fill=tk.X) 
+listbox.pack() 
 top.mainloop()
