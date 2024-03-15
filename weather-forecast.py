@@ -5,8 +5,6 @@ from dotenv import load_dotenv
 from tkinter.simpledialog import askstring
 from tkinter import *
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-# Implement the default Matplotlib key bindings.
-from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 
 
@@ -70,24 +68,26 @@ def draw_temp_vs_seven_days():
     toolbar.update()
     canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.X, expand=1)
 
-load_dotenv()
-api_key = os.environ["API_KEY"]
-top = Tk()
-top.wm_title("Weather forecast")
-top.geometry("450x900")
-listbox = Listbox(top, height = 10, 
-                width = 40, 
-                bg = "grey",
-                activestyle = 'dotbox', 
-                font = "Helvetica",
-                fg = "yellow")
-weather_data = get_weather_data() 
-todays_weather = Button(top, text = "Today's weather", command = get_todays_weather) 
-todays_weather.pack(fill=tk.X) 
-three_day_weather = Button(top, text = "Three day weather forecast", command = lambda:get_x_day_weather(3)) 
-three_day_weather.pack(fill=tk.X) 
-seven_day_weather = Button(top, text = "Seven day weather forecast", command = lambda:get_x_day_weather(7)) 
-seven_day_weather.pack(fill=tk.X) 
-temp_vs_7days = Button(top, text = "Seven days temperature graphic", command = draw_temp_vs_seven_days) 
-temp_vs_7days.pack(fill=tk.X) 
-top.mainloop()
+    
+if __name__ == "__main__":
+    load_dotenv()
+    api_key = os.environ["API_KEY"]
+    top = Tk()
+    top.wm_title("Weather forecast")
+    top.geometry("450x900")
+    listbox = Listbox(top, height = 10, 
+                    width = 40, 
+                    bg = "grey",
+                    activestyle = 'dotbox', 
+                    font = "Helvetica",
+                    fg = "yellow")
+    weather_data = get_weather_data() 
+    todays_weather = Button(top, text = "Today's weather", command = get_todays_weather) 
+    todays_weather.pack(fill=tk.X) 
+    three_day_weather = Button(top, text = "Three day weather forecast", command = lambda:get_x_day_weather(3)) 
+    three_day_weather.pack(fill=tk.X) 
+    seven_day_weather = Button(top, text = "Seven day weather forecast", command = lambda:get_x_day_weather(7)) 
+    seven_day_weather.pack(fill=tk.X) 
+    temp_vs_7days = Button(top, text = "Seven days temperature graphic", command = draw_temp_vs_seven_days) 
+    temp_vs_7days.pack(fill=tk.X) 
+    top.mainloop()
